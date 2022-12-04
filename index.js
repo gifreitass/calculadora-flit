@@ -1,14 +1,17 @@
 //quando clicar no botão, o número deve aparecer na tela da calculadora
 
+//CRIANDO VARIÁVEIS
 const calculatorNumbers = document.getElementsByClassName('calculatorNumbers')
 const calculatorElements = document.getElementsByClassName('calculatorElements')
 const calculatorScreen = document.getElementById('calculatorScreen')
 const equal = document.getElementById('equal')
+const lastResult = document.getElementById('lastResult')
 
 let firstNumber = ''
 let lastNumber = ''
 let operationSignal = ''
 
+//CRIANDO FUNÇÕES PARA OS NÚMEROS E OPERADORES APARECEREM ASSIM QUE CLICARMOS 
 function screenNumbers(e){
     calculatorScreen.innerHTML += e.target.innerText;
     if (operationSignal == ''){
@@ -17,6 +20,11 @@ function screenNumbers(e){
         lastNumber += e.target.innerText
     }
 }
+
+//Array.from transforma o calculatorNumbers (que é um HTMLCollection) em um array de verdade
+Array.from(calculatorNumbers).forEach(number => {
+    number.addEventListener('click', screenNumbers)
+});
 
 //currentTarget: serve para a div, sem se importar com o que está sendo clicado no conteúdo dela
 function screenElements(e){
@@ -33,12 +41,16 @@ function screenElements(e){
     } 
 }
 
+Array.from(calculatorElements).forEach(element => {
+    element.addEventListener('click', screenElements)
+});
+
+//FUNÇÃO PARA REALIZAR AS OPERAÇÕES
+let finalResult = 0
 
 function operation(){   
     firstNumber = parseFloat(firstNumber)
     lastNumber = parseFloat(lastNumber)
-
-    let finalResult = 0
 
     if(operationSignal == 'division'){
         finalResult = firstNumber / lastNumber
@@ -53,14 +65,25 @@ function operation(){
     calculatorScreen.innerHTML = finalResult
 }
 
-//Array.from transforma o calculatorNumbers (que é um HTMLCollection) em um array de verdade
-
-Array.from(calculatorNumbers).forEach(number => {
-    number.addEventListener('click', screenNumbers)
-});
-
-Array.from(calculatorElements).forEach(element => {
-    element.addEventListener('click', screenElements)
-});
-
 equal.addEventListener('click', operation)
+
+//SALVANDO NO LOCAL STORAGE
+function prevResult(){
+    lastResult.innerHTML = finalResult
+    window.localStorage.setItem('lastResult', finalResult)
+}
+
+equal.addEventListener('click', prevResult)
+
+//PEGANDO O ITEM ANTIGO
+let getItem = window.localStorage.getItem('lastResult')
+
+function getLastResult(){
+    if(!getItem){
+        lastResult.innerHTML = 0
+    } else{
+        lastResult.innerHTML = getItem
+    }
+}
+
+window.addEventListener('load', getLastResult)
