@@ -70,7 +70,7 @@ body{
     font-size: 25px;
 }
 
-.calculatorNumbers, .calculatorElements{
+.calculatorNumbers, .calculatorElements, .equal, .point{
     display: flex;
     border-radius: 10px;
     align-items: center;
@@ -83,7 +83,7 @@ body{
     background-color: #414141;
 }
 
-.calculatorElements{
+.calculatorElements, .equal, .point{
     background-color: #b7b7b7;
 }
 
@@ -101,5 +101,5 @@ body{
     padding: 5px;
     color: white;
     border-radius: 20px;
-    width: 80px;
+    width: 40%;
 }
